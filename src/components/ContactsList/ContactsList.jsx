@@ -1,15 +1,17 @@
 import { useSelector } from 'react-redux';
 import { ContactItem } from 'components/ContactItem/ContactItem';
-import { getContacts } from 'redux/selectors';
+import { getContacts, getError, getIsLoading } from 'redux/selectors';
 import { getFilter } from 'redux/selectors';
 import { List } from './ContactListStyle';
 
 export const ContactsList = () => {
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
+  const isLoading = useSelector(getIsLoading);
+  const error = useSelector(getError);
 
   const getVisibleContacts = (contacts, filter) => {
-    console.log(contacts);
+    console.log(isLoading);
     return contacts.filter(
       contact =>
         contact.name &&
@@ -20,6 +22,8 @@ export const ContactsList = () => {
 
   return (
     <List>
+      {isLoading && !error && <b>Loading...</b>}
+      {error && <p>Oops, something went wrong</p>}
       {visibleContacts.map(({ id, name, phone, onClick }) => (
         <ContactItem
           key={id}
